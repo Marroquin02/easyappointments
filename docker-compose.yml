@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: easyappointments-app
+    ports:
+      - "80:80"
+    environment:
+      BASE_URL: "http://localhost"
+      LANGUAGE: "spanish"
+      DEBUG_MODE: "true"
+      DB_HOST: "db"                  # Nombre del servicio de la base de datos
+      DB_NAME: "mi-db-name"
+      DB_USERNAME: "mi-usuario"
+      DB_PASSWORD: "mi-contraseña"
+      GOOGLE_SYNC_FEATURE: "true"
+      GOOGLE_CLIENT_ID: "mi-client-id"
+      GOOGLE_CLIENT_SECRET: "mi-client-secret"
+      ROOT_EMAIL: "admin@mi-dominio.com"
+    depends_on:
+      - db                           # Asegura que el servicio de la base de datos esté listo antes de que la aplicación inicie
+
+  db:
+    image: mysql:8.0                 # Imagen de MySQL (versión 8.0)
+    container_name: easyappointments-db
+    environment:
+      MYSQL_DATABASE: "mi-db-name"
+      MYSQL_USER: "mi-usuario"
+      MYSQL_PASSWORD: "mi-contraseña"
+      MYSQL_ROOT_PASSWORD: "rootpassword"   # Contraseña para el usuario root
+    volumes:
+      - db_data:/var/lib/mysql       # Volumen para la persistencia de datos
+
+volumes:
+  db_data:                           # Define el volumen para la base de datos
